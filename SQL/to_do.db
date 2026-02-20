@@ -1,0 +1,27 @@
+create database to_do character set utf8mb4 collate utf8mb4_unicode_ci;
+
+use to_do;
+
+create table users ( 
+id int unsigned auto_increment primary key,
+name varchar(80) not null,
+email varchar(80) not null unique,
+password_hash varchar(255) not null, 
+created_at datetime not null default current_timestamp
+) engine=InnoDB;
+
+create table tasks ( 
+id int unsigned auto_increment primary key,
+user_id int unsigned not null,
+title varchar (200) not null,
+description text null,
+status ENUM('pendente','fazendo','finalizado') not null default 'pendente',
+priority ENUM('baixa','media','alta') NOT NULL DEFAULT 'media',
+due_date DATE NULL,
+created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+updated_at DATETIME NULL DEFAULT NULL,
+CONSTRAINT fk_tasks_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+INDEX idx_tasks_user (user_id),
+INDEX idx_tasks_status (status),
+INDEX idx_tasks_due (due_date)
+) ENGINE=InnoDB;
